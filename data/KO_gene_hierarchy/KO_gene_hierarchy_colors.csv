@@ -1,0 +1,37 @@
+Membrane Transport	0.6	0.27	0.05
+Carbohydrate Metabolism	0.75	0.38	0.15
+Energy Metabolism	0.87	0.55	0.2
+Lipid Metabolism	0.85	0.6	0.05
+Nucleotide Metabolism	0.92	0.7	0.35
+Amino Acid Metabolism	0.9961	0.65	0.0694
+Metabolism of Other Amino Acids	0.99	0.61	0.07
+Glycan Biosynthesis and Metabolism	0.8	0.45	0.2
+Biosynthesis of Other Secondary Metabolites	0.94	0.65	0.09
+Metabolism of Cofactors and Vitamins	0.89	0.68	0.35
+Metabolism of Terpenoids and Polyketides	0.85	0.67	0.4
+Other enzymes	0.8	0.5	0.
+Transcription	0.3	0.35	0.8
+Translation	0.34	0.49	0.92
+Folding, Sorting and Degradation	0.5	0.69	1
+DNA maintenance	0.66	0.78	1
+Signaling Molecules and Interaction	0.72	0.74	0.05
+Signal Transduction	0.58	0.68	0.0
+Vesicular transport	0.75	0.06	0.12
+Transport and Catabolism	0.75	0.06	0.12
+Cytoskeleton	1	0.25	0.4
+Cell Growth and Death	0.98	0.22	0.22
+Cell Motility	0.98	0.1	0.3
+Cell Communication	0.92	0.08	0.2
+Circulatory System	1	0.45	0.5
+Endocrine System	0.97	0.35	0.55
+Excretory System	0.95	0.25	0.7
+Immune System	0.85	0.1	0.82
+Digestive System	0.85	0.1	0.82
+Development	0.92	0.15	0.92
+Cancers	0.2	0.08	0.2
+Immune System Diseases	0.21	0.12	0.21
+Neurodegenerative Diseases	0.26	0.19	0.26
+Metabolic Diseases	0.34	0.28	0.34
+Cardiovascular Diseases	0.42	0.36	0.42
+Infectious Diseases	0.5	0.44	0.5
+Not mapped	0.64	0.61	0.59
