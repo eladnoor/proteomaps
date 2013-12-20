@@ -1,28 +1,31 @@
 import sys
-import os
-import subprocess
+import modify_ko_hierarchy, extend_hierarchy_with_genes
 import re
+import os
 
-PYTHON_PATH = '../python/'
-GENERAL_HIERARCHY_FNAME = '../genomic_data/KO_gene_hierarchy/KO_gene_hierarchy_general.tms'
-CHANGES_FNAME = '../genomic_data/KO_gene_hierarchy/KO_gene_hierarchy_changes_v1.0.csv'
+try:
+    os.mkdir('../res')
+except OSError:
+    pass
+
+PYTHON_PATH = './'
+GENERAL_HIERARCHY_FNAME = '../../../Dropbox/proteomaps_data/genomic_data/KO_gene_hierarchy/KO_gene_hierarchy_general.tms'
+CHANGES_FNAME = '../data/KO_gene_hierarchy/KO_gene_hierarchy_changes.csv'
+MAPPINGS_PATH = '../data/KO_gene_hierarchy/KO_gene_hierarchy_organism_mapping/'
 MODIFIED_HIERARCHY_FNAME = '../res/hierarchy_modified.tms'
-MAPPINGS_PATH = '../genomic_data/KO_gene_hierarchy/KO_gene_hierarchy_organism_mapping/'
 
-p = subprocess.Popen(['python',
-                      PYTHON_PATH + 'modify_ko_hierarchy.py',
-                      GENERAL_HIERARCHY_FNAME,
-                      CHANGES_FNAME,
-                      MODIFIED_HIERARCHY_FNAME])
-p.wait()
+if not os.path.exists(GENERAL_HIERARCHY_FNAME):
+    sys.stderr.write('ERROR: cannot find the general hierarchy file')
+    
+modify_ko_hierarchy.main(open(GENERAL_HIERARCHY_FNAME, 'r'),
+                         open(CHANGES_FNAME, 'r'),
+                         open(MODIFIED_HIERARCHY_FNAME, 'w'))
 
 for f in os.listdir(MAPPINGS_PATH):
     for org in re.findall('(\w+)_mapping\.csv', f):
-        subprocess.Popen(['python',
-                          PYTHON_PATH + 'extend_hierarchy_with_genes.py',
-                          MODIFIED_HIERARCHY_FNAME,
-                          MAPPINGS_PATH + org + '_mapping.csv',
-                          '--root_name', org],
-                          stdout=open('../res/' + org + '_hierarchy.tms', 'w'))
+        extend_hierarchy_with_genes.extend(hierarchy_file=open(MODIFIED_HIERARCHY_FNAME, 'r'),
+                                           mapping_file=open(MAPPINGS_PATH + org + '_mapping.csv', 'r'),
+                                           output_file=open('../res/' + org + '_hierarchy.tms', 'w'),
+                                           root_name=org)
     
 
