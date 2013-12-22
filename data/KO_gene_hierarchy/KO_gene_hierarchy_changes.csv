@@ -3352,7 +3352,7 @@ spo	SPAC1F8.07c	SPAC1F8.07c	K01568	Glycolysis / Gluconeogenesis	KEGG	pyruvate de
 spo	SPCC576.03c	Tpx1	SPCC57603c	Other enzymes	Ron		thioredoxin peroxidase Tpx1			
 spo	SPCC1223.02	Nmt1	SPCC122302	Thiamine metabolism	http://www.ncbi.nlm.nih.gov/pubmed/2358444		no message in thiamine Nmt1			
 spo	SPAC6B12.15	SPAC6B12.15	K14753	Ribosome	http://www.uniprot.org/uniprot/P38011		K14753 guanine nucleotide-binding protein subunit beta-2-like 1 protein			
-spo	SPBC8D2.18c	SPBC8D2.18c	K01251	Cysteine and methionine metabolism	KEGG		K01251  adenosylhomocysteinase			
+spo	SPBC8D2.18c	SPBC8D2.18c	K01251	Cysteine and methionine metabolism	KEGG		K01251Â Â adenosylhomocysteinase			
 spo	SPBC660.16	SPBC660.16	K00033	Pentose phosphate pathway	KEGG		K00033 6-phosphogluconate dehydrogenase			
 spo	SPCC330.06c	SPCC330.06c	K03386	Other enzymes	Ron		K03386 thioredoxin peroxidase			
 spo	SPAC25B8.12c	SPAC25B8.12c	SPAC25B812c	Purine metabolism	Ron		nucleotide-sugar phosphatase			
@@ -3362,7 +3362,7 @@ spo	SPBC21B10.08c	P450	SPBC21B1008c	Cytochrome P450		Not sure	Orphan maybe  Anti
 spo	SPBC530.07c	SPBC530.07c	SPBC530.07c	Pyrimidine metabolism			phosphomethylpyrimidine kinase			
 spo	SPAC24C9.12c	SPAC24C9.12c	K00600	Glycine, serine and threonine metabolism	KEGG		K00600			
 spo	SPBC2G5.05	SPBC2G5.05	SPBC2G505	Pentose phosphate pathway	KEGG		transketolase			
-spo	SPAC4F10.14c	SPAC4F10.14c	K01527	Chaperones and folding catalysts	http://www.ncbi.nlm.nih.gov/pubmed/10982809		K01527  nascent polypeptide-associated complex subunit beta			
+spo	SPAC4F10.14c	SPAC4F10.14c	K01527	Chaperones and folding catalysts	http://www.ncbi.nlm.nih.gov/pubmed/10982809		K01527Â Â nascent polypeptide-associated complex subunit beta			
 spo	SPAC3C7.14c	Uhp1	SPAC3C714c	Chromosome-related	Ron		ubiquitinated histone-like protein Uhp1			
 spo	SPAC1006.07	SPAC1006.07	K03257	RNA transport			K03257
 ath	AT4G02930	AT4G02930	K02358	Translation factors	KEGG web services
