@@ -15,64 +15,32 @@ import re
 import sys
 import argparse
 import csv
+import logging
+import hierarchy
 
-def main(hierarchy_file, modification_file, output_file):
+def main(hierarchy_file, modification_file, output_file, tree_depth=4):
+    # read the original hierarchy file into a tree structure
+    
+    ko_tree = hierarchy.Hierarchy.load(hierarchy_file)
+    ko_tree.create_node('Not mapped', (1, 'Not mapped'), parent=ko_tree.root)
+    for level in xrange(2, 5):
+        ko_tree.create_node('Not mapped', (level, 'Not mapped'), parent=(level-1, 'Not mapped'))
+
     # -----------------------------------------------------------
-    ## read file modify_KO_hierarchy.tsv containing genes to be added to the hierarchy
-    ## (overriding possibly existing entries)
+    ## read file KO_gene_hierarchy_changes.csv containing genes to be added to the hierarchy
+    ## and move the KO to the new pathway.
+    ## Note: the last mapping in the modification file is the one that will be used
 
-    added_ko_2_pathway = set()
-    modified_ko_dictionary = {} 
+    ko_to_pathway_dict = {}
     for row in csv.reader(modification_file, delimiter='\t'):
         ko, pathway = row[3:5]
+        try:
+            ko_tree.move_node(ko, pathway)
+        except KeyError:
+            logging.debug('The KO [%s] is not in the original hierarchy' % ko)
 
-        # if there are several pathways for the same KO, we use only the last one
-        added_ko_2_pathway.add(ko)
-        modified_ko_dictionary.setdefault(pathway, set()).add(ko)
-
-    # -----------------------------------------------------------
-
-    ## go through hierarchy and write all lines that are either no KO numbers or 
-    ## KO numbers that appear in the relevant list; also exclude all KO Numbers that
-    ## already appeared further up
-
-    ko_used = set()
-    outlines = []
-    for row in csv.reader(hierarchy_file, delimiter='\t'):
-        # in a hierarchy file, only one of the cells in each row is not empty
-        # we store the index of that cell in 'col'
-        level = 0
-        while not row[level]:
-            level += 1
-        
-        if level == 3:
-            # if the KO is in one of the changed pathways, skip this line since
-            # we are moving it to a different location in the tree
-            if row[level] in added_ko_2_pathway:
-               continue
-
-            # if the KO has already been used somewhere in the tree before this line
-            # remove the line as well, since we cannot have duplicate entries
-            if row[level] in ko_used:
-                continue
-            ko_used.add(row[level])
-        
-        outlines.append(row)
-        
-        # if this is a level-2 line, and the label matches one of the
-        # dictionary entries, drop all the relevant KOs in this location
-        if level == 2:
-            for ko in modified_ko_dictionary.get(row[level], []):
-                outlines.append(['', '', '', ko])
-                ko_used.add(ko)
-
-    for i in xrange(4):
-        outlines.append([''] * i + ['Not mapped'])
-        
-    fo = csv.writer(output_file, delimiter='\t')
-    fo.writerows(outlines)
+    ko_tree.save(output_file)
     output_file.close()
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='a simplified version of filter_ko_hierarchy.py')

@@ -9,7 +9,7 @@ except OSError:
     pass
 
 PYTHON_PATH = './'
-GENERAL_HIERARCHY_FNAME = '../../../Dropbox/proteomaps_data/genomic_data/KO_gene_hierarchy/KO_gene_hierarchy_general.tms'
+GENERAL_HIERARCHY_FNAME = '../data/KO_gene_hierarchy/KO_gene_hierarchy_general.tms'
 CHANGES_FNAME = '../data/KO_gene_hierarchy/KO_gene_hierarchy_changes.csv'
 MAPPINGS_PATH = '../data/KO_gene_hierarchy/KO_gene_hierarchy_organism_mapping/'
 MODIFIED_HIERARCHY_FNAME = '../res/hierarchy_modified.tms'
@@ -26,6 +26,6 @@ for f in os.listdir(MAPPINGS_PATH):
         extend_hierarchy_with_genes.extend(hierarchy_file=open(MODIFIED_HIERARCHY_FNAME, 'r'),
                                            mapping_file=open(MAPPINGS_PATH + org + '_mapping.csv', 'r'),
                                            output_file=open('../res/' + org + '_hierarchy.tms', 'w'),
-                                           root_name=org)
+                                           organism_name=org)
     
 
