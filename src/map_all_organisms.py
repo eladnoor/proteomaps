@@ -24,9 +24,6 @@ for f in os.listdir(MAPPINGS_PATH):
     except IndexError:
         continue
     
-    if org != 'hsa':
-        continue
-
     sys.stderr.write('Mapping orgnaism: %s...\n' % org)
     KO_tree = hierarchy.Hierarchy.load(open(GENERAL_HIERARCHY_FNAME, 'r'))
     KO_tree.apply_updates(open(CHANGES_FNAME, 'r'), org)

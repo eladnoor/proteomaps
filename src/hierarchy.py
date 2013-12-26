@@ -80,20 +80,17 @@ class Hierarchy(Tree):
                 continue
             KO, pathway = row[3:5]
 
-            sys.stdout.write('Trying to move node %s to pathway %s ... ' % (KO, pathway))
-
             pathway_node = self.get_node((KO_level-1, pathway))
             if pathway_node is None:
-                sys.stdout.write('pathway is not in the general hierarchy file\n')
+                logging.debug('pathway %s is not in the general hierarchy file' % pathway)
                 continue
             
             KO_node = self.get_node((KO_level, KO))
             if KO_node is None:
-                sys.stdout.write('KO is not in the general hierarchy file, creating new one\n')
+                logging.debug('KO %s is not in the general hierarchy file, creating new one' % KO)
                 self.create_node(KO, (KO_level, KO), parent=pathway_node.identifier)
             else:
                 self.move_node(KO_node.identifier, pathway_node.identifier)
-                sys.stdout.write('success\n')
                 
     def extend(self, mapping_file, organism_name=None, KO_level=4):
         self.get_node((0, 'KO')).tag = organism_name
