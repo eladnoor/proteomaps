@@ -61,3 +61,53 @@ class Hierarchy(Tree):
             if len(node.fpointer) == 0:
                 yield node
         
+    def apply_updates(self, update_file, organism_name=None, KO_level=4):
+        # read the original hierarchy file into a tree structure
+        
+        self.create_node('Not mapped', (1, 'Not mapped'), parent=self.root)
+        for level in xrange(2, 5):
+            self.create_node('Not mapped', (level, 'Not mapped'), parent=(level-1, 'Not mapped'))
+        self.create_node('Not mapped:NotMapped', (5, 'Not mapped'), parent=(4, 'Not mapped'))
+
+        # -----------------------------------------------------------
+        ## read file KO_gene_hierarchy_changes.csv containing genes to be added to the hierarchy
+        ## and move the KO to the new pathway.
+        ## Note: the last mapping in the modification file is the one that will be used
+
+        KO_to_pathway_dict = {}
+        for row in csv.reader(update_file, delimiter='\t'):
+            if row[0] != organism_name:
+                continue
+            KO, pathway = row[3:5]
+
+            pathway_node = self.get_node((KO_level-1, pathway))
+            if pathway_node is None:
+                logging.debug('pathway %s is not in the general hierarchy file' % pathway)
+                continue
+            
+            KO_node = self.get_node((KO_level, KO))
+            if KO_node is None:
+                logging.debug('KO %s is not in the general hierarchy file, creating new one' % KO)
+                self.create_node(KO, (KO_level, KO), parent=pathway_node.identifier)
+            else:
+                self.move_node(KO_node.identifier, pathway_node.identifier)
+                
+    def extend(self, mapping_file, organism_name=None, KO_level=4):
+        self.get_node((0, 'KO')).tag = organism_name
+        used_systematic_names = set()    
+        for row in csv.reader(mapping_file, delimiter='\t'):
+            systematic, gene, KO = row
+            if systematic in used_systematic_names:
+                logging.debug('The gene %s appears more than once, ignoring all '
+                              'duplicate occurances' % gene)
+                continue
+            used_systematic_names.add(systematic)
+            
+            KO_node = self.get_node((KO_level, KO))
+            if KO_node is None:
+                logging.debug('The KO %s is not in the general hierarchy file' % KO)
+                continue
+
+            leaf_tag = '%s:%s' % (gene, systematic)
+            self.create_node(leaf_tag, leaf_tag, parent=KO_node.identifier)
+
