@@ -1,7 +1,6 @@
-from treelib import Node, Tree, tree
+from treelib import Node, Tree
 import csv
 import logging
-import sys
 
 class Hierarchy(Tree):
 
@@ -74,7 +73,6 @@ class Hierarchy(Tree):
         ## and move the KO to the new pathway.
         ## Note: the last mapping in the modification file is the one that will be used
 
-        KO_to_pathway_dict = {}
         for row in csv.reader(update_file, delimiter='\t'):
             if row[0] != organism_name:
                 continue
@@ -110,4 +108,3 @@ class Hierarchy(Tree):
 
             leaf_tag = '%s:%s' % (gene, systematic)
             self.create_node(leaf_tag, leaf_tag, parent=KO_node.identifier)
-
