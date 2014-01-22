@@ -68,7 +68,7 @@ for row in csv.reader(gzip.open(GENE_ASSOCIATION_FNAME, 'r'), delimiter='\t'):
     node = GOtree.get_node(go)
     
     # check that this GO is a leaf in the tree (i.e. has no children)
-    if node is not None and node.is_leaf():
+    if node is not None and len(node.fpointer) == 0:
         gene_to_go.setdefault(gene, set([])).add(go)
 
 # now, we need to select only one GO for each gene, and add that gene to
