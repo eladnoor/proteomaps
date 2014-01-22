@@ -17,6 +17,3 @@ logger.addHandler(stdout_handler)
 logger.addHandler(file_handler)
 logger.setLevel(logging.INFO)
 
-sys.path.append(os.path.join(os.path.dirname(__file__), "../src"))
-
-print os.path.join(os.path.dirname(__file__), "../src")

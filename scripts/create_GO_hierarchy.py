@@ -13,6 +13,9 @@ import gzip
 import csv
 import sys
 
+if not os.path.exists('res'):
+    os.mkdir('res')
+
 if True:
     GO_OBO_URL = 'http://geneontology.org/ontology/go.obo'
     GO_OBO_FNAME = 'res/go.obo'
