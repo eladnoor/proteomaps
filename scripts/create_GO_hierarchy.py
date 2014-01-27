@@ -81,7 +81,7 @@ for i, row in enumerate(csv.reader(gzip.open(GENE_ASSOCIATION_FNAME, 'r'),
     node = GOtree.get_node(go)
     
     # check that this GO is a leaf in the tree (i.e. has no children)
-    if node is not None and node.is_leaf():
+    if node is not None and len(node.fpointer) == 0:
         gene_to_go.setdefault(systematic_name, []).append(go)
         if systematic_name not in gene_to_display_name:
             gene_to_display_name[systematic_name] = display_name
