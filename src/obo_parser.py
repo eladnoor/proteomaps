@@ -326,6 +326,61 @@ class GODag(dict):
     def to_tree(self, root_id, priority_list=[]):
         """
         Use a BFS from the root to decide the level of each node in the graph.
+        Associate the children to their parents according to a priority_list.
+        
+        Input:
+            dag  - a directer acyclic graph, format should be a dictionary
+                   whose keys are all the node IDs and values are lists
+                   of theirs children
+            root - the ID of the node that should be the root of the tree
+        """
+        if root_id not in self:
+            raise KeyError('The chosen root is not in the GODag %s:' % root_id)
+        
+        tree = Hierarchy()
+        tree.create_node(self[root_id].name, root_id, parent=None)
+        
+        parents = [root_id]
+        
+        level = 0
+        while parents:
+            logging.info("Tree level %02d, %d nodes" % (level, len(parents)))
+            children = set()
+            
+            child_to_parent_list = {}
+            for parent in parents:
+                for child in [c.id for c in self[parent].children]:
+                    if tree.get_node(child) is not None:
+                        continue
+                    children.add(child)
+                    child_to_parent_list.setdefault(child, []).append(parent)
+
+            # associate each child with the parent with the highest priority
+            # in the priority list
+            for child, parent_list in child_to_parent_list.iteritems():
+                parent = parent_list[0] # by default, choose the first parent in the list
+                
+                # if one of the IDs in the priority list is a parent, use that
+                # one instead
+                for go_id in priority_list:
+                    if go_id in parent_list:
+                        parent = go_id
+                        break
+                
+                # we have to get rid of all colons in the names of the 
+                # tree because Paver treats them as delimiters between
+                # display name and systematic name
+                child_name = self[child].name.replace(':', ';')
+                tree.create_node(child_name, child, parent)
+        
+            parents = list(children)
+            level += 1
+
+        return tree
+
+    def to_shallow_tree(self, root_id):
+        """
+        Use a BFS from the root to decide the level of each node in the graph.
         For each child, keep only one of the edges leading to it so it will
         have a single parent, from the previous level. Choose these edges 
         in a way which will keep the tree balanced (probably not optimally 
@@ -373,12 +428,5 @@ class GODag(dict):
                 tree.create_node(child_name, child, parent)
                 child_counts[i][0] += 1
                 child_counts.sort()
-            
-            parents = []
-            for go_id in priority_list:
-                if go_id in children:
-                    parents.append(go_id)
-                    children.remove(go_id)
-            parents += list(children)
             
         return tree
