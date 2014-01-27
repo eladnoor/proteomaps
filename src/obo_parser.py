@@ -323,7 +323,7 @@ class GODag(dict):
         if bad_terms:
             logging.warning("terms not found: %s", bad_terms)
 
-    def to_tree(self, root_id):
+    def to_tree(self, root_id, priority_list=[]):
         """
         Use a BFS from the root to decide the level of each node in the graph.
         For each child, keep only one of the edges leading to it so it will
@@ -344,7 +344,7 @@ class GODag(dict):
         tree = Hierarchy()
         tree.create_node(self[root_id].name, root_id, parent=None)
         
-        parents = set([root_id])
+        parents = [root_id]
         
         while parents:
             children = set()
@@ -365,9 +365,20 @@ class GODag(dict):
                 for i, (counter, parent) in enumerate(child_counts):
                     if parent in parent_list:
                         break
-                tree.create_node(self[child].name, child, parent)
+                    
+                # we have to get rid of all colons in the names of the 
+                # tree because Paver treats them as delimiters between
+                # display name and systematic name
+                child_name = self[child].name.replace(':', ';')
+                tree.create_node(child_name, child, parent)
                 child_counts[i][0] += 1
                 child_counts.sort()
-            parents = children
+            
+            parents = []
+            for go_id in priority_list:
+                if go_id in children:
+                    parents.append(go_id)
+                    children.remove(go_id)
+            parents += list(children)
             
         return tree
