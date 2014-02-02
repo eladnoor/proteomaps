@@ -1,7 +1,6 @@
-from treelib import Node, Tree, tree
+from treelib import Node, Tree
 import csv
 import logging
-import sys
 
 class Hierarchy(Tree):
 

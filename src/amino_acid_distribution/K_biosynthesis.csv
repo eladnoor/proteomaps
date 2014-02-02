@@ -1,0 +1,11 @@
+lysine biosynthesis I						
+Gene ID	Gene Accession	Gene name	Reaction id	Reaction EC	Enzymatic activity	Evidence
+EG10550	b4024	lysC	ASPARTATEKIN-RXN	2.7.2.4	aspartate kinase	EV-EXP
+EG10088	b3433	asd	ASPARTATE-SEMIALDEHYDE-DEHYDROGENASE-RXN	1.2.1.11	aspartate semialdehyde dehydrogenase	EV-EXP
+EG10205	b2478	dapA	DIHYDRODIPICSYN-RXN	4.3.3.7	4-hydroxy-tetrahydrodipicolinate synthase	EV-EXP
+EG10206	b0031	dapB	RXN-14014	1.17.1.8	4-hydroxy-tetrahydrodipicolinate reductase	EV-EXP
+EG10207	b0166	dapD	TETHYDPICSUCC-RXN	2.3.1.117	tetrahydrodipicolinate succinylase	EV-EXP
+EG10066	b3359	argD	SUCCINYLDIAMINOPIMTRANS-RXN	2.6.1.17	N-succinyldiaminopimelate aminotransferase	EV-EXP
+EG10208	b2472	dapE	SUCCDIAMINOPIMDESUCC-RXN	3.5.1.18	N-succinyl-L-diaminopimelate desuccinylase	EV-EXP
+EG10209	b3809	dapF	DIAMINOPIMEPIM-RXN	5.1.1.7	diaminopimelate epimerase	EV-EXP
+EG10549	b2838	lysA	DIAMINOPIMDECARB-RXN	4.1.1.20	diaminopimelate decarboxylase	EV-EXP

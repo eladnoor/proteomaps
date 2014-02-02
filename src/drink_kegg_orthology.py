@@ -74,5 +74,5 @@ for dbentries in chunks:
             print field_val
             print '-' * 50
         else:
-            sys.stderr.write("WARNING: %s does not contain a %s field" %
+            sys.stderr.write("WARNING: %s does not contain a %s field\n" %
                              (FIELD_NAME, dbentry))
