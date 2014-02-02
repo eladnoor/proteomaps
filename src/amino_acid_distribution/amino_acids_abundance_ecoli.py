@@ -102,4 +102,4 @@ def main(UPID_list_fname, abundance_fname, cutoff, output_fname):
         #sys.exit(0)
         
 if __name__ == "__main__":
-    main('all_ecoli_genes.txt', 'Ecoli_19_Conditions_Proteomics.csv', 0, 'aa_dist_by_UP_ID.csv')
+    main('all_ecoli_genes.txt', 'Ecoli_19_Conditions_Proteomics.csv', 15, 'aa_dist_by_UP_ID.csv')

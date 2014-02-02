@@ -80,16 +80,19 @@ def calculate_aa_dist_per_proteome(proteome_fname, UPID_to_aa_dist):
                 total_proteomic_aa_dist[i, :] += abundance[i] * aa_dist
     return total_proteomic_aa_dist
                 
-def normalize_aa_dist(aa_dist_array):
-    for i in aa_dist_array: 
-        aa_dist_array_normed[i, :] = aa_dist_array[i, :] / sum(aa_dist_array[i, :])
+def normalize_aa_dist(total_proteomic_aa_dist, conditions):
+    total_proteomic_aa_dist_normed = a_normed = np.zeros((conditions, len(AA_LETTERS)))
+    for i, row in enumerate(total_proteomic_aa_dist): 
+        total_proteomic_aa_dist_normed[i] = total_proteomic_aa_dist[i] / sum(total_proteomic_aa_dist[i])
+    return total_proteomic_aa_dist_normed
         
 if __name__ == "__main__":
     UPID_to_aa_dist = download_aa_dist_per_gene('all_ecoli_genes.txt',20)
     write_to_tsv(['UPID'] + AA_LETTERS, UPID_to_aa_dist, 'aa_dist_by_UP_ID.csv')
     aa_dist_genome = calculate_aa_dist_per_genome(UPID_to_aa_dist)
     total_proteomic_aa_dist = calculate_aa_dist_per_proteome('Ecoli_19_Conditions_Proteomics.csv', UPID_to_aa_dist)        
-    
+    a = normalize_aa_dist(total_proteomic_aa_dist)
+    print a
     
     
     
