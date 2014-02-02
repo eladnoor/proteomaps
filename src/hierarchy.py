@@ -7,6 +7,14 @@ class Hierarchy(Tree):
     def __init__(self):
         Tree.__init__(self)
 
+    @staticmethod
+    def pair2id(level, tag):
+        return '%03d:%s' % (level, tag)
+        
+    @staticmethod
+    def id2pair(identifier):
+        return int(identifier[0:3]), identifier[4:]
+
     def save(self, f, nid=None, level=Tree.ROOT, idhidden=True, filter=None, cmp=None, key=None, reverse=False):
         leading = ''
         lasting = ''
@@ -41,7 +49,7 @@ class Hierarchy(Tree):
             branch[level] = row[level]
             
             tag = branch[level]
-            identifier = (level, branch[level])
+            identifier = Hierarchy.pair2id(level, branch[level])
             
             if h.get_node(identifier) is not None:
                 logging.debug('The label [%s] appears twice in the hierarchy' 
@@ -49,7 +57,7 @@ class Hierarchy(Tree):
             elif level == 0:
                 h.create_node(tag, identifier, parent=None)
             else:
-                h.create_node(tag, identifier, parent=(level-1, branch[level-1]))
+                h.create_node(tag, identifier, parent=Hierarchy.pair2id(level-1, branch[level-1]))
         return h
 
     def all_leaves(self):
@@ -63,36 +71,39 @@ class Hierarchy(Tree):
     def apply_updates(self, update_file, organism_name=None, KO_level=4):
         # read the original hierarchy file into a tree structure
         
-        self.create_node('Not mapped', (1, 'Not mapped'), parent=self.root)
+        self.create_node('Not mapped', Hierarchy.pair2id(1, 'Not mapped'), parent=self.root)
         for level in xrange(2, 5):
-            self.create_node('Not mapped', (level, 'Not mapped'), parent=(level-1, 'Not mapped'))
-        self.create_node('Not mapped:NotMapped', (5, 'Not mapped'), parent=(4, 'Not mapped'))
+            self.create_node('Not mapped',
+                             Hierarchy.pair2id(level, 'Not mapped'),
+                             parent=Hierarchy.pair2id(level-1, 'Not mapped'))
+        self.create_node('Not mapped:NotMapped',
+                         Hierarchy.pair2id(5, 'Not mapped'),
+                         parent=Hierarchy.pair2id(4, 'Not mapped'))
 
         # -----------------------------------------------------------
         ## read file KO_gene_hierarchy_changes.csv containing genes to be added to the hierarchy
         ## and move the KO to the new pathway.
         ## Note: the last mapping in the modification file is the one that will be used
 
-        KO_to_pathway_dict = {}
         for row in csv.reader(update_file, delimiter='\t'):
             if row[0] != organism_name:
                 continue
             KO, pathway = row[3:5]
 
-            pathway_node = self.get_node((KO_level-1, pathway))
+            pathway_node = self.get_node(Hierarchy.pair2id(KO_level-1, pathway))
             if pathway_node is None:
                 logging.debug('pathway %s is not in the general hierarchy file' % pathway)
                 continue
             
-            KO_node = self.get_node((KO_level, KO))
+            KO_node = self.get_node(Hierarchy.pair2id(KO_level, KO))
             if KO_node is None:
                 logging.debug('KO %s is not in the general hierarchy file, creating new one' % KO)
-                self.create_node(KO, (KO_level, KO), parent=pathway_node.identifier)
+                self.create_node(KO, Hierarchy.pair2id(KO_level, KO), parent=pathway_node.identifier)
             else:
                 self.move_node(KO_node.identifier, pathway_node.identifier)
                 
     def extend(self, mapping_file, organism_name=None, KO_level=4):
-        self.get_node((0, 'KO')).tag = organism_name
+        self.get_node(Hierarchy.pair2id(0, 'KO')).tag = organism_name
         used_systematic_names = set()    
         for row in csv.reader(mapping_file, delimiter='\t'):
             systematic, gene, KO = row
@@ -102,11 +113,10 @@ class Hierarchy(Tree):
                 continue
             used_systematic_names.add(systematic)
             
-            KO_node = self.get_node((KO_level, KO))
+            KO_node = self.get_node(Hierarchy.pair2id(KO_level, KO))
             if KO_node is None:
                 logging.debug('The KO %s is not in the general hierarchy file' % KO)
                 continue
 
             leaf_tag = '%s:%s' % (gene, systematic)
             self.create_node(leaf_tag, leaf_tag, parent=KO_node.identifier)
-
